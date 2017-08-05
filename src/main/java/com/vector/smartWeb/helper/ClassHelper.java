@@ -4,6 +4,7 @@ import com.vector.smartWeb.annonation.Controller;
 import com.vector.smartWeb.annonation.Service;
 import com.vector.smartWeb.util.ClassUtil;
 
+import java.lang.annotation.Annotation;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -60,5 +61,31 @@ public final class ClassHelper {
         beanClassSet.addAll(getControllerClassSet());
         beanClassSet.addAll(getServiceClassSet());
         return beanClassSet;
+    }
+
+    /**
+     * 获取应用包下某父类（或接口）的所有子类
+     */
+    public static Set<Class<?>> getClassSetBySuper(Class<?> superClass){
+        Set<Class<?>> classSet=new HashSet<Class<?>>();
+        for (Class<?> clazz:CLASS_SET){
+            if (superClass.isAssignableFrom(clazz) && !superClass.equals(clazz)){
+                classSet.add(clazz);
+            }
+        }
+        return classSet;
+    }
+
+    /**
+     * 获取应用包名下所有带有指定注解的类
+     */
+    public static Set<Class<?>> getClassByAnnoation(Class<? extends Annotation> annonationClass){
+        Set<Class<?>> classSet=new HashSet<Class<?>>();
+        for (Class<?> clazz:CLASS_SET){
+            if (clazz.isAnnotationPresent(annonationClass)){
+                classSet.add(clazz);
+            }
+        }
+        return classSet;
     }
 }

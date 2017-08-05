@@ -1,9 +1,6 @@
 package com.vector.smartWeb;
 
-import com.vector.smartWeb.helper.BeanHelper;
-import com.vector.smartWeb.helper.ClassHelper;
-import com.vector.smartWeb.helper.ControllerHelper;
-import com.vector.smartWeb.helper.IOCHelper;
+import com.vector.smartWeb.helper.*;
 import com.vector.smartWeb.util.ClassUtil;
 
 /**
@@ -13,7 +10,7 @@ import com.vector.smartWeb.util.ClassUtil;
 public final class HelperLoader {
     public static void init(){
         Class<?>[] classList={
-                ClassHelper.class, BeanHelper.class, IOCHelper.class, ControllerHelper.class
+                ClassHelper.class, BeanHelper.class,AopHelper.class,IOCHelper.class, ControllerHelper.class
         };
         for (Class<?> clazz:classList){
             ClassUtil.loadClass(clazz.getName(),true);
