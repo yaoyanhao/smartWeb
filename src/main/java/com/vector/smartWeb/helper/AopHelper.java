@@ -4,6 +4,7 @@ import com.vector.smartWeb.annonation.Aspect;
 import com.vector.smartWeb.proxy.AspectProxy;
 import com.vector.smartWeb.proxy.Proxy;
 import com.vector.smartWeb.proxy.ProxyManager;
+import com.vector.smartWeb.proxy.TransactionProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +34,7 @@ public final class AopHelper {
         }
     }
 
+
     /**
      * 获得所有目标类
      */
@@ -52,6 +54,7 @@ public final class AopHelper {
     private static Map<Class<?>,Set<Class<?>>> createProxyMap() throws Exception{
         Map<Class<?>,Set<Class<?>>> proxyMap=new HashMap<Class<?>, Set<Class<?>>>();
 
+        //添加切面代理
         Set<Class<?>> proxyClassSet=ClassHelper.getClassSetBySuper(AspectProxy.class);//1.所有代理类都继承AspectProxy类
         for (Class<?> proxyClass:proxyClassSet){
             if (proxyClass.isAnnotationPresent(Aspect.class)){//2.代理类需要带有@Aspect注解
@@ -60,6 +63,11 @@ public final class AopHelper {
                 proxyMap.put(proxyClass,targetClassSet);
             }
         }
+
+        //添加事务代理
+        Set<Class<?>> transactionTargetClasses=ClassHelper.getClassByAnnoation(Annotation.class);//所有带有@Transation注解的类
+        proxyMap.put(TransactionProxy.class,transactionTargetClasses);
+
         return proxyMap;
     }
 

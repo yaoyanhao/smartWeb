@@ -192,4 +192,48 @@ public final class DataBaseHelper {
     private static String getTableName(Class<?> entityClass){
         return entityClass.getSimpleName();
     }
+
+    public static void beginTransaction(){
+        Connection connection=getConnection();
+        if (connection!=null){
+            try {
+                connection.setAutoCommit(false);
+            } catch (SQLException e) {
+                LOGGER.error("begin transaction failed",e);
+                throw new RuntimeException(e);
+            } finally {
+                CONNECTION_HOLDER.set(connection);
+            }
+        }
+    }
+
+    public static void commitTransaction(){
+        Connection connection=getConnection();
+        if (connection!=null){
+            try {
+                connection.commit();
+                connection.close();
+            } catch (SQLException e) {
+                LOGGER.error("commit transaction failed",e);
+                throw new RuntimeException(e);
+            } finally {
+                CONNECTION_HOLDER.remove();
+            }
+        }
+    }
+
+    public static void rollbackTransaction(){
+        Connection connection=getConnection();
+        if (connection!=null){
+            try {
+                connection.rollback();
+                connection.close();
+            } catch (SQLException e) {
+                LOGGER.error("rollback transaction failed",e);
+                throw new RuntimeException(e);
+            } finally {
+                CONNECTION_HOLDER.remove();
+            }
+        }
+    }
 }
